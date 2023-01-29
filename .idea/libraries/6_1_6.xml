@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="6.1.6">
+    <CLASSES>
+      <root url="file://$MAVEN_REPOSITORY$/org/hibernate/hibernate-core/6.1.6.Final" />
+      <root url="file://$MAVEN_REPOSITORY$/org/hibernate/hibernate-core/6.1.6.Final" />
+      <root url="jar://$MAVEN_REPOSITORY$/mysql/mysql-connector-java/8.0.30/mysql-connector-java-8.0.30.jar!/" />
+      <root url="file://$MAVEN_REPOSITORY$/org/hibernate/hibernate-core/6.1.6.Final" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$MAVEN_REPOSITORY$/org/hibernate/hibernate-core/6.1.6.Final" recursive="false" />
+    <jarDirectory url="file://$MAVEN_REPOSITORY$/org/hibernate/hibernate-core/6.1.6.Final" recursive="false" />
+    <jarDirectory url="file://$MAVEN_REPOSITORY$/org/hibernate/hibernate-core/6.1.6.Final" recursive="false" />
+  </library>
+</component>
