@@ -1,14 +1,12 @@
 package jm.task.core.jdbc.dao;
 
-import jakarta.persistence.PersistenceException;
+
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.hibernate.*;
+import org.hibernate.query.Query;
 
-import java.sql.Connection;
+import javax.persistence.PersistenceException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +15,7 @@ public class UserDaoHibernateImpl implements UserDao {
     private static final Util utilInstance = Util.getInstance();
     private static final SessionFactory sessionFactory = utilInstance.getSessionFactory();
     private Transaction tx = null;
+    private String sql;
 
 
     public UserDaoHibernateImpl() {
@@ -26,20 +25,47 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction tx = session.beginTransaction();
+ //           User user = (User) session.get(User.class, id).
+            sql = "CREATE TABLE IF NOT EXISTS users " +
+                    "(id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
+                    "name VARCHAR(255) NOT NULL, lastName VARCHAR(255) NOT NULL, " +
+                    "age TINYINT NOT NULL)";
 
+            SQLQuery query = session.createSQLQuery(sql);
+            query.executeUpdate();
+
+            tx.commit();
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+
+        }
     }
 
     @Override
     public void dropUsersTable() {
+        try (Session session = sessionFactory.openSession()) {
+            tx = session.beginTransaction();
+            Query query = session.createQuery("DELETE FROM User");
+            query.executeUpdate();
 
+            tx.commit();
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+
+        }
     }
 
     @Override
     public void saveUser(String name, String lastName, byte age) {
         try (Session session = sessionFactory.openSession()) {
+
             Transaction tx = session.beginTransaction();
             session.persist(new User(name, lastName, (byte) age));
+
             tx.commit();
+
         } catch (PersistenceException e) {
             e.printStackTrace();
             if (null != tx) {
@@ -54,7 +80,7 @@ public class UserDaoHibernateImpl implements UserDao {
             tx = session.beginTransaction();
             User user = (User) session.get(User.class, id);
             if (null != user) {
-                session.delete(user);
+                session.remove(user);
             }
             tx.commit();
         } catch (PersistenceException e) {
@@ -68,25 +94,35 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public List<User> getAllUsers() {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from User").list();
+            Transaction tx = session.beginTransaction();
+            Query query = session.createQuery("FROM User");
+            List<User> users = query.list();
+            tx.commit();
+            return users;
+
         } catch (HibernateException e) {
             e.printStackTrace();
         }
-
         return new ArrayList<>();
     }
 
 
-    // Очистка содержания таблицы
     @Override
     public void cleanUsersTable() {
-        try {
-            Session session = sessionFactory.getCurrentSession();
-            session.beginTransaction();
-            session.createQuery("delete User ").executeUpdate();
-            session.getTransaction().commit();
-        } finally {
-            sessionFactory.close();
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();;
+                Query query = session.createQuery("DELETE FROM User");
+                query.executeUpdate();
+                transaction.commit();
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                e.printStackTrace();
+            }
         }
+
     }
 }

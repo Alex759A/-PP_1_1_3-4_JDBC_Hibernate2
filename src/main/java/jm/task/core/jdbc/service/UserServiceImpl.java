@@ -33,7 +33,6 @@ public class UserServiceImpl implements UserService {
         }
         return users;
     }
-
     public void cleanUsersTable() {
         userDao.cleanUsersTable();
     }
