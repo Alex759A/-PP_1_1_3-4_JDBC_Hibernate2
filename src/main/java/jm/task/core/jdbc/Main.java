@@ -15,20 +15,21 @@ public class Main {
     private  static final UserService userService = new UserServiceImpl();
     public static void main(String[] args) {
         // реализуйте алгоритм здесь
-        userService.dropUsersTable();
+//        userService.dropUsersTable();
         userService.createUsersTable();
+//
+//        userService.saveUser("Ivan", "Ivanov", (byte) 33);
+//        userService.saveUser("Petr", "Petrov", (byte) 25);
+//        userService.saveUser("Egor", "Egorov", (byte) 55);
+//        userService.saveUser("Sergey", "Sergeev", (byte) 44);
+//
+//        userService.removeUserById(2);
+//
+//        userService.getAllUsers();
 
-        userService.saveUser("Ivan", "Ivanov", (byte) 33);
-        userService.saveUser("Petr", "Petrov", (byte) 25);
-        userService.saveUser("Egor", "Egorov", (byte) 55);
-        userService.saveUser("Sergey", "Sergeev", (byte) 44);
 
-        userService.removeUserById(2);
-
-        userService.getAllUsers();
-
-
-        userService.cleanUsersTable();
+//        userService.cleanUsersTable();
+//        userService.dropUsersTable();
 
 
     }
